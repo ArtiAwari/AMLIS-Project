@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block title %}Home | Legal Document Category Prediction{% endblock %}
+
+{% block content %}
+<div class="container py-2">
+  
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <span class="badge bg-warning text-dark px-3 py-2 fw-bold text-uppercase mb-3">
+          <i class="bi bi-mortarboard-fill me-1"></i> AMLIS College Academic Project
+        </span>
+        <h1 class="hero-title">Legal Document Category Prediction Using Machine Learning</h1>
+        <p class="hero-subtitle">
+          An intelligent NLP system that parses legal agreements, deeds, and court judgments in PDF or TXT formats, extracts discriminative linguistic features, and automatically classifies them into domain-specific categories with calibrated confidence scores and feature interpretations.
+        </p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="{{ url_for('views.classify') }}" class="btn btn-gold btn-lg d-flex align-items-center gap-2">
+            <i class="bi bi-lightning-charge-fill"></i> Start Document Classification
+          </a>
+          <a href="{{ url_for('views.dashboard') }}" class="btn btn-outline-light btn-lg d-flex align-items-center gap-2">
+            <i class="bi bi-speedometer2"></i> View Metrics Dashboard
+          </a>
+          <a href="{{ url_for('views.concepts') }}" class="btn btn-link text-warning text-decoration-none d-flex align-items-center gap-1">
+            <i class="bi bi-book"></i> Read Academic Concept Guide
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-4 d-none d-lg-block text-center">
+        <div class="p-4 bg-white bg-opacity-10 rounded-4 border border-white border-opacity-25 shadow-lg">
+          <i class="bi bi-file-earmark-diff text-warning" style="font-size: 5rem;"></i>
+          <h5 class="text-white mt-3 fw-bold">10 Legal Categories</h5>
+          <p class="text-light small mb-0">NDAs, Leases, Employment, Service Agreements, Privacy Policies, Court Judgments, and more.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key Academic Features -->
+  <div class="row g-4 mb-5">
+    <div class="col-12 text-center mb-2">
+      <h3 class="fw-bold text-navy">Core Capabilities & Technical Highlights</h3>
+      <p class="text-muted">Demonstrating modern Natural Language Processing and Supervised Learning pipelines.</p>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card card-custom h-100 p-3">
+        <div class="card-body">
+          <div class="kpi-icon-wrapper kpi-icon-navy mb-3">
+            <i class="bi bi-file-earmark-pdf"></i>
+          </div>
+          <h5 class="fw-bold text-navy">PyMuPDF Document Ingestion</h5>
+          <p class="text-muted small">
+            High-speed local PDF and TXT text extraction without external APIs. Accurately flags non-selectable or scanned image-only documents.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card card-custom h-100 p-3">
+        <div class="card-body">
+          <div class="kpi-icon-wrapper kpi-icon-gold mb-3">
+            <i class="bi bi-diagram-3"></i>
+          </div>
+          <h5 class="fw-bold text-navy">Legal Domain NLP Pipeline</h5>
+          <p class="text-muted small">
+            TF-IDF unigram & bigram vectorization with custom tokenizers that preserve critical legal modal verbs, negations, and covenants.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card card-custom h-100 p-3">
+        <div class="card-body">
+          <div class="kpi-icon-wrapper kpi-icon-green mb-3">
+            <i class="bi bi-cpu"></i>
+          </div>
+          <h5 class="fw-bold text-navy">Tri-Algorithm Benchmarking</h5>
+          <p class="text-muted small">
+            Trains and evaluates Multinomial Naive Bayes, Logistic Regression, and Calibrated Linear SVM using Stratified K-Fold Cross-Validation.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card card-custom h-100 p-3">
+        <div class="card-body">
+          <div class="kpi-icon-wrapper kpi-icon-blue mb-3">
+            <i class="bi bi-search"></i>
+          </div>
+          <h5 class="fw-bold text-navy">Explainable Feature Attribution</h5>
+          <p class="text-muted small">
+            Inspects classifier weights and log-odds coefficients to extract the top indicative lexical terms that triggered the document's classification.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card card-custom h-100 p-3">
+        <div class="card-body">
+          <div class="kpi-icon-wrapper kpi-icon-navy mb-3">
+            <i class="bi bi-pie-chart"></i>
+          </div>
+          <h5 class="fw-bold text-navy">K-Means & TruncatedSVD</h5>
+          <p class="text-muted small">
+            Interactive unsupervised document clustering and 2D sparse vector dimensionality reduction for exploratory corpus analysis.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card card-custom h-100 p-3">
+        <div class="card-body">
+          <div class="kpi-icon-wrapper kpi-icon-gold mb-3">
+            <i class="bi bi-file-earmark-arrow-down"></i>
+          </div>
+          <h5 class="fw-bold text-navy">Automated Report Generation</h5>
+          <p class="text-muted small">
+            Exports formal academic classification reports and model evaluation summaries in PDF and plain text format via ReportLab.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4-Step Interactive Pipeline Workflow -->
+  <div class="card card-custom p-4 mb-5 shadow-sm">
+    <div class="card-body">
+      <h4 class="fw-bold text-navy mb-4 text-center">
+        <i class="bi bi-arrow-repeat text-warning me-2"></i> End-to-End Machine Learning Workflow Pipeline
+      </h4>
+      <div class="row g-4 text-center">
+        <div class="col-md-3">
+          <div class="p-3 bg-light rounded-3 h-100 border">
+            <span class="badge bg-navy text-white rounded-circle p-2 mb-2">1</span>
+            <h6 class="fw-bold">Ingestion & Extraction</h6>
+            <p class="small text-muted mb-0">Upload PDF/TXT or paste text. PyMuPDF extracts text streams and validates length & encoding.</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="p-3 bg-light rounded-3 h-100 border">
+            <span class="badge bg-navy text-white rounded-circle p-2 mb-2">2</span>
+            <h6 class="fw-bold">NLP Preprocessing</h6>
+            <p class="small text-muted mb-0">Lowercasing, punctuation normalization, domain stopword filtering, and sublinear TF-IDF vectorization.</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="p-3 bg-light rounded-3 h-100 border">
+            <span class="badge bg-navy text-white rounded-circle p-2 mb-2">3</span>
+            <h6 class="fw-bold">Model Classification</h6>
+            <p class="small text-muted mb-0">Evaluates candidate classifiers and executes inference using the persisted best pipeline.</p>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="p-3 bg-light rounded-3 h-100 border">
+            <span class="badge bg-navy text-white rounded-circle p-2 mb-2">4</span>
+            <h6 class="fw-bold">Diagnostics & Audit</h6>
+            <p class="small text-muted mb-0">Outputs calibrated confidence, ranks top indicative terms, logs snippet to SQLite, and generates PDF report.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Technology Stack Badges -->
+  <div class="text-center mb-5">
+    <h5 class="fw-bold text-navy mb-3">Academic Technology Stack</h5>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <span class="badge bg-white text-dark border px-3 py-2 shadow-sm"><i class="bi bi-code-square me-1 text-primary"></i> Python 3.14</span>
+      <span class="badge bg-white text-dark border px-3 py-2 shadow-sm"><i class="bi bi-gear-fill me-1 text-success"></i> Scikit-Learn (Pipelines, TF-IDF)</span>
+      <span class="badge bg-white text-dark border px-3 py-2 shadow-sm"><i class="bi bi-file-earmark-pdf-fill me-1 text-danger"></i> PyMuPDF (fitz)</span>
+      <span class="badge bg-white text-dark border px-3 py-2 shadow-sm"><i class="bi bi-server me-1 text-warning"></i> Flask 3.1</span>
+      <span class="badge bg-white text-dark border px-3 py-2 shadow-sm"><i class="bi bi-database-fill me-1 text-info"></i> SQLite 3</span>
+      <span class="badge bg-white text-dark border px-3 py-2 shadow-sm"><i class="bi bi-bar-chart-fill me-1 text-danger"></i> Chart.js 4</span>
+      <span class="badge bg-white text-dark border px-3 py-2 shadow-sm"><i class="bi bi-bootstrap-fill me-1 text-primary"></i> Bootstrap 5</span>
+      <span class="badge bg-white text-dark border px-3 py-2 shadow-sm"><i class="bi bi-check2-circle me-1 text-success"></i> Pytest</span>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

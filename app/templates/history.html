@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Prediction History | AMLIS{% endblock %}
+
+{% block content %}
+<div class="container py-2">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold text-navy mb-1"><i class="bi bi-clock-history text-warning me-2"></i>Prediction History & Audit Trail</h2>
+      <p class="text-muted mb-0">Audit log of classified documents stored in local SQLite database (preserving non-sensitive excerpts only).</p>
+    </div>
+    <div>
+      <button type="button" id="clear-all-history-btn" class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1">
+        <i class="bi bi-trash3"></i> Clear All History
+      </button>
+    </div>
+  </div>
+
+  <!-- Search & Filter Controls -->
+  <div class="card card-custom p-3 mb-4 shadow-sm">
+    <div class="row g-3">
+      <div class="col-md-8">
+        <div class="input-group">
+          <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+          <input type="text" id="history-search" class="form-control border-start-0" placeholder="Search by filename, indicative terms, or text excerpt...">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <select id="history-category-filter" class="form-select">
+          <option value="">All Legal Categories</option>
+          <option value="Non-Disclosure Agreement (NDA)">Non-Disclosure Agreement (NDA)</option>
+          <option value="Rental or Lease Agreement">Rental or Lease Agreement</option>
+          <option value="Employment Contract">Employment Contract</option>
+          <option value="Service Agreement">Service Agreement</option>
+          <option value="Privacy Policy">Privacy Policy</option>
+          <option value="Terms and Conditions">Terms and Conditions</option>
+          <option value="Court Judgment">Court Judgment</option>
+          <option value="Power of Attorney">Power of Attorney</option>
+          <option value="Sale or Purchase Agreement">Sale or Purchase Agreement</option>
+          <option value="Other / Unclassified">Other / Unclassified</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- History Records Table -->
+  <div class="card card-custom shadow-sm mb-4">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th style="width: 15%;">Timestamp</th>
+              <th style="width: 20%;">Document Name</th>
+              <th style="width: 20%;">Predicted Category</th>
+              <th style="width: 10%;">Confidence</th>
+              <th style="width: 15%;">Model</th>
+              <th style="width: 15%;">Text Excerpt</th>
+              <th style="width: 5%;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody">
+            <tr>
+              <td colspan="7" class="text-center py-4 text-muted">
+                <div class="spinner-border spinner-border-sm me-2" role="status"></div> Loading audit history...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+EXECUTIVE EMPLOYMENT AGREEMENT
+
+This Employment Agreement is entered into between CloudScale Technologies Inc. ("Employer") and Jordan Miller ("Employee").
+
+1. POSITION AND DUTIES
+Employee shall serve in the executive role of Senior Director of Engineering, reporting directly to the Vice President of Product Engineering.
+
+2. COMPENSATION AND BENEFITS
+Employer agrees to pay an annual base salary of $175,000, payable in bi-weekly disbursements subject to statutory tax withholding. Employee is eligible for the annual performance bonus, comprehensive health insurance, and 401(k) retirement matching.
+
+3. RESTRICTIVE COVENANTS AND NON-COMPETE
+During the term of employment and for twelve (12) months following termination, Employee covenants not to solicit customers or employees of Employer or engage in competing software engineering enterprises within North America.
+
+4. TERMINATION
+Employment is at-will. Either party may terminate this agreement upon thirty (30) days advance written notice.

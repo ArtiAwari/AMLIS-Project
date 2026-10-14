@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+{% block title %}AMLIS Concepts & Viva Guide | Legal Classifier{% endblock %}
+
+{% block content %}
+<div class="container py-2">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold text-navy mb-1"><i class="bi bi-mortarboard text-warning me-2"></i>AMLIS Academic Concepts & Viva Guide</h2>
+      <p class="text-muted mb-0">Applied Machine Learning and Intelligent Systems curriculum mapping, mathematical intuition, and oral examination preparation.</p>
+    </div>
+    <div class="d-none d-md-block">
+      <a href="#clustering-viz" class="btn btn-outline-navy btn-sm">
+        <i class="bi bi-diagram-3 me-1"></i> Interactive 2D SVD Explorer
+      </a>
+    </div>
+  </div>
+
+  <!-- Interactive 2D TruncatedSVD & K-Means Section -->
+  <div class="card card-custom shadow-sm mb-5" id="clustering-viz" style="border-top: 4px solid var(--gold-accent) !important;">
+    <div class="card-header card-header-custom">
+      <div>
+        <i class="bi bi-diagram-3 text-warning me-2"></i>
+        <span>Concept H & I: Unsupervised K-Means & TruncatedSVD 2D Dimensionality Reduction</span>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <label for="cluster-k-select" class="small text-muted fw-bold mb-0">Clusters ($k$):</label>
+        <select id="cluster-k-select" class="form-select form-select-sm w-auto">
+          <option value="3">k = 3</option>
+          <option value="4">k = 4</option>
+          <option value="5" selected>k = 5</option>
+          <option value="6">k = 6</option>
+          <option value="8">k = 8</option>
+        </select>
+      </div>
+    </div>
+    <div class="card-body p-4">
+      <div class="alert alert-light border small text-muted mb-3">
+        <strong>Academic Distinction:</strong> In contrast to supervised classifiers that learn from predetermined labels, <strong>K-Means clustering</strong> discovers latent clusters by iteratively minimizing within-cluster inertia in the high-dimensional TF-IDF feature space. <strong>TruncatedSVD</strong> reduces this sparse matrix into two principal components for human visualization without calculating expensive full covariance matrices.
+      </div>
+
+      <!-- Centroid Keywords Cards -->
+      <div class="row mb-3" id="cluster-cards-container">
+        <!-- Dynamically rendered cluster cards -->
+      </div>
+
+      <!-- Scatter Canvas -->
+      <div style="position: relative; height: 380px;" class="border rounded p-2 bg-white">
+        <canvas id="svdScatterChart"></canvas>
+      </div>
+      <p class="text-muted small text-center mt-2 mb-0">
+        Hover over points to inspect original document IDs, true category labels, and excerpt texts.
+      </p>
+    </div>
+  </div>
+
+  <!-- Detailed Concepts Guide (Concepts A - K) -->
+  <div class="row g-4 mb-5">
+
+    <!-- Concept A -->
+    <div class="col-md-6">
+      <div class="card card-custom h-100 p-3">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge bg-navy text-white">Concept A</span>
+            <h5 class="fw-bold text-navy mb-0">Data Preprocessing & Cleaning</h5>
+          </div>
+          <p class="small text-muted">
+            Legal documents contain formatting irregularities, line breaks, and citations. The preprocessing module:
+          </p>
+          <ul class="small text-muted ps-3 mb-2">
+            <li><strong>Missing values:</strong> Drops rows lacking text content or category labels.</li>
+            <li><strong>Duplicate detection:</strong> Identifies and prunes duplicate records based on document text hashing to prevent test contamination.</li>
+            <li><strong>Domain-aware stopword removal:</strong> Standard stopwords (like "the", "an") are removed, but critical legal negations and modal verbs (<code>not</code>, <code>shall</code>, <code>may</code>, <code>liable</code>, <code>covenant</code>) are strictly preserved.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Concept B -->
+    <div class="col-md-6">
+      <div class="card card-custom h-100 p-3">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge bg-navy text-white">Concept B</span>
+            <h5 class="fw-bold text-navy mb-0">Exploratory Data Analysis (EDA)</h5>
+          </div>
+          <p class="small text-muted">
+            Systematic exploratory analysis verifies corpus health before model training:
+          </p>
+          <ul class="small text-muted ps-3 mb-2">
+            <li><strong>Document length metrics:</strong> Tracks character and word token distributions (mean, median, standard deviation).</li>
+            <li><strong>Class imbalance analysis:</strong> Audits sample representation per legal class to prevent majority-class bias.</li>
+            <li><strong>Vocabulary profiling:</strong> Analyzes term frequency to determine optimal <code>min_df</code> and <code>max_df</code> thresholds.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Concept C -->
+    <div class="col-md-6">
+      <div class="card card-custom h-100 p-3">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge bg-navy text-white">Concept C</span>
+            <h5 class="fw-bold text-navy mb-0">Feature Engineering: TF-IDF & N-Grams</h5>
+          </div>
+          <p class="small text-muted">
+            Converts unstructured legal text into sparse numerical vector matrices:
+          </p>
+          <div class="p-2 bg-light rounded border small mb-2">
+            $$\text{TF-IDF}(t, d, D) = \text{TF}(t, d) \times \log\left(\frac{1 + |D|}{1 + |\{d \in D : t \in d\}|}\right) + 1$$
+          </div>
+          <ul class="small text-muted ps-3 mb-0">
+            <li><strong>Unigrams & Bigrams:</strong> Captures compound legal phrases such as <em>"receiving party"</em>, <em>"confidential information"</em>, and <em>"gross misconduct"</em>.</li>
+            <li><strong>Sublinear TF Scaling:</strong> Replaces term frequency with $1 + \log(\text{TF})$ to prevent frequent mentions of a term from dominating.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Concept D -->
+    <div class="col-md-6">
+      <div class="card card-custom h-100 p-3">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge bg-navy text-white">Concept D</span>
+            <h5 class="fw-bold text-navy mb-0">Supervised Classification Algorithms</h5>
+          </div>
+          <p class="small text-muted">
+            The system benchmarks three diverse statistical learning algorithms:
+          </p>
+          <ul class="small text-muted ps-3 mb-0">
+            <li><strong>Multinomial Naive Bayes:</strong> Generative probabilistic model applying Bayes' theorem with feature conditional independence assumptions. Fast and effective for text.</li>
+            <li><strong>Logistic Regression:</strong> Discriminative linear classifier modeling posterior probabilities via the softmax function with L2 ridge regularization.</li>
+            <li><strong>Linear SVM (Support Vector Machine):</strong> Maximizes geometric margin between hyperplane boundaries, highly resilient in high-dimensional sparse text vectors.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Concept E & F -->
+    <div class="col-md-6">
+      <div class="card card-custom h-100 p-3">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge bg-navy text-white">Concept E & F</span>
+            <h5 class="fw-bold text-navy mb-0">Validation & Performance Metrics</h5>
+          </div>
+          <p class="small text-muted">
+            Rigorous validation protocols prevent over-optimistic reporting:
+          </p>
+          <ul class="small text-muted ps-3 mb-0">
+            <li><strong>Stratified Train/Test Split:</strong> Preserves identical percentage of each legal category in both training and test partitions.</li>
+            <li><strong>Macro F1-Score:</strong> Primary selection metric. Computes harmonic mean of Precision and Recall per class, then averages across classes unweighted.</li>
+            <li><strong>Confusion Matrix:</strong> Explicitly reveals cross-category misclassifications (e.g. Service Agreements confused with NDAs).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Concept G & J & K -->
+    <div class="col-md-6">
+      <div class="card card-custom h-100 p-3">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge bg-navy text-white">Concept G, J & K</span>
+            <h5 class="fw-bold text-navy mb-0">Tuning, Attribution & Persistence</h5>
+          </div>
+          <p class="small text-muted">
+            Enterprise machine learning best practices:
+          </p>
+          <ul class="small text-muted ps-3 mb-0">
+            <li><strong>GridSearchCV:</strong> Exhaustively explores regularization strength $C$, smoothing $\alpha$, and n-gram boundaries over internal cross-validation folds.</li>
+            <li><strong>Feature Attribution:</strong> Ranks model coefficients $w_i$ for linear classifiers or log-likelihood ratios for Naive Bayes to highlight words driving predictions.</li>
+            <li><strong>Pipeline Persistence:</strong> Entire scikit-learn <code>Pipeline</code> containing the fitted vectorizer and classifier is serialized via <code>joblib</code>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Viva Preparation & Oral Examination Q&A -->
+  <div class="card card-custom p-4 shadow-sm mb-4" id="viva-prep">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <i class="bi bi-question-diamond-fill text-warning fs-4"></i>
+      <h4 class="fw-bold text-navy mb-0">Viva Examination Questions & Model Answers</h4>
+    </div>
+    <div class="accordion accordion-flush" id="vivaAccordion">
+      
+      <div class="accordion-item border-bottom">
+        <h2 class="accordion-header" id="q1">
+          <button class="accordion-button collapsed fw-bold text-navy" type="button" data-bs-toggle="collapse" data-bs-target="#ans1">
+            Q1. Why is TF-IDF preferable to a simple Bag-of-Words (CountVectorizer) for legal text?
+          </button>
+        </h2>
+        <div id="ans1" class="accordion-collapse collapse" data-bs-parent="#vivaAccordion">
+          <div class="accordion-body small text-muted">
+            Simple Bag-of-Words only counts raw frequencies. In legal documents, boilerplate words such as <em>"party"</em>, <em>"agreement"</em>, and <em>"clause"</em> appear repeatedly across all categories and would overshadow discriminative terms. TF-IDF downweights terms appearing across the whole corpus via the Inverse Document Frequency (IDF) factor, while boosting category-defining terms like <em>"sublease"</em> (Lease) or <em>"indemnification"</em> (Service Agreement).
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item border-bottom">
+        <h2 class="accordion-header" id="q2">
+          <button class="accordion-button collapsed fw-bold text-navy" type="button" data-bs-toggle="collapse" data-bs-target="#ans2">
+            Q2. Why is Macro F1-Score used as the model selection metric instead of simple Accuracy?
+          </button>
+        </h2>
+        <div id="ans2" class="accordion-collapse collapse" data-bs-parent="#vivaAccordion">
+          <div class="accordion-body small text-muted">
+            Accuracy is misleading when class distributions are imbalanced. A classifier could achieve 90% accuracy simply by predicting majority classes while failing completely on rare contract types. <strong>Macro F1-Score</strong> computes the F1-score independently for each class and calculates the unweighted mean, ensuring every legal category is treated with equal importance regardless of sample count.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item border-bottom">
+        <h2 class="accordion-header" id="q3">
+          <button class="accordion-button collapsed fw-bold text-navy" type="button" data-bs-toggle="collapse" data-bs-target="#ans3">
+            Q3. How does this project prevent Data Leakage between training and testing?
+          </button>
+        </h2>
+        <div id="ans3" class="accordion-collapse collapse" data-bs-parent="#vivaAccordion">
+          <div class="accordion-body small text-muted">
+            By wrapping the <code>TfidfVectorizer</code> and classifier inside a <code>sklearn.pipeline.Pipeline</code> and splitting the raw text into Train and Test partitions <em>before</em> feature extraction. The vectorizer calls <code>fit_transform()</code> only on the training set. The test set is processed strictly with <code>transform()</code>, meaning terms present solely in the test set never leak into the vocabulary.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item border-bottom">
+        <h2 class="accordion-header" id="q4">
+          <button class="accordion-button collapsed fw-bold text-navy" type="button" data-bs-toggle="collapse" data-bs-target="#ans4">
+            Q4. Why did we wrap LinearSVC inside CalibratedClassifierCV?
+          </button>
+        </h2>
+        <div id="ans4" class="accordion-collapse collapse" data-bs-parent="#vivaAccordion">
+          <div class="accordion-body small text-muted">
+            Standard <code>LinearSVC</code> optimizes hinge loss and only computes signed distances to the separating hyperplane (decision scores), which lack probabilistic interpretation and cannot be directly summed to 1.0. <code>CalibratedClassifierCV</code> fits a sigmoid logistic curve (Platt Scaling) over the decision function outputs to produce mathematically valid posterior probability estimates.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="q5">
+          <button class="accordion-button collapsed fw-bold text-navy" type="button" data-bs-toggle="collapse" data-bs-target="#ans5">
+            Q5. What is the fundamental difference between K-Means clustering and Supervised Classification?
+          </button>
+        </h2>
+        <div id="ans5" class="accordion-collapse collapse" data-bs-parent="#vivaAccordion">
+          <div class="accordion-body small text-muted">
+            Supervised classification trains models using known ground truth category labels ($y$) to predict discrete target classes. K-Means is an <strong>unsupervised</strong> clustering algorithm that ignores labels entirely and groups documents into $k$ clusters solely by minimizing the Euclidean distance between document TF-IDF vectors and cluster centroids. Discovered clusters indicate statistical lexical patterns, not legal validity.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

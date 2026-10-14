@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% block title %}Classify Legal Document | AMLIS{% endblock %}
+
+{% block content %}
+<div class="container py-2">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold text-navy mb-1"><i class="bi bi-file-earmark-check text-warning me-2"></i>Legal Document Classification</h2>
+      <p class="text-muted mb-0">Upload a PDF or TXT legal contract, or paste text to perform automated category prediction.</p>
+    </div>
+    <div class="d-none d-md-block">
+      <span class="badge bg-light text-dark border px-3 py-2">
+        <i class="bi bi-check-circle-fill text-success me-1"></i> Active Model Ready
+      </span>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Input Column -->
+    <div class="col-lg-6">
+      <div class="card card-custom h-100 shadow-sm">
+        <div class="card-header card-header-custom">
+          <span><i class="bi bi-upload text-primary me-2"></i>1. Provide Legal Document</span>
+          <span class="badge bg-light text-secondary border">PDF or TXT</span>
+        </div>
+        <div class="card-body p-4">
+
+          <!-- Drop Zone -->
+          <div class="drop-zone mb-3" id="drop-zone">
+            <div class="drop-zone-icon">
+              <i class="bi bi-cloud-arrow-up"></i>
+            </div>
+            <h6 class="fw-bold text-navy mb-1">Drag & Drop Legal Document Here</h6>
+            <p class="text-muted small mb-2">Supported formats: <strong>.pdf</strong> or <strong>.txt</strong> (Max: 16 MB)</p>
+            <button type="button" class="btn btn-outline-navy btn-sm">
+              <i class="bi bi-folder2-open me-1"></i> Browse Local File
+            </button>
+            <input type="file" id="file-input" class="d-none" accept=".pdf,.txt">
+          </div>
+
+          <!-- Selected File Badge -->
+          <div id="selected-file-badge" class="alert alert-primary d-flex justify-content-between align-items-center d-none py-2 px-3 mb-3">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-file-earmark-text-fill fs-5"></i>
+              <span id="selected-file-name" class="fw-bold small"></span>
+            </div>
+            <button type="button" class="btn-close btn-sm" id="remove-file-btn" aria-label="Remove"></button>
+          </div>
+
+          <div class="position-relative text-center my-3">
+            <hr class="text-muted">
+            <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 small text-muted text-uppercase fw-semibold">
+              OR PASTE LEGAL TEXT
+            </span>
+          </div>
+
+          <!-- Raw Text Paste Input -->
+          <div class="mb-3">
+            <textarea id="raw-text-input" class="form-control" rows="8" placeholder="Paste legal clauses, agreements, terms, or judicial transcripts here... (minimum 20 characters)"></textarea>
+          </div>
+
+          <!-- Quick Sample Loaders -->
+          <div class="mb-4">
+            <span class="small fw-semibold text-muted d-block mb-2">
+              <i class="bi bi-magic me-1"></i> Load Demonstrative Legal Samples:
+            </span>
+            <div class="d-flex flex-wrap gap-2">
+              <button type="button" class="btn btn-sm btn-light border btn-load-sample" data-sample="nda">
+                <i class="bi bi-shield-lock me-1"></i> Sample NDA
+              </button>
+              <button type="button" class="btn btn-sm btn-light border btn-load-sample" data-sample="lease">
+                <i class="bi bi-building me-1"></i> Sample Lease
+              </button>
+              <button type="button" class="btn btn-sm btn-light border btn-load-sample" data-sample="employment">
+                <i class="bi bi-person-badge me-1"></i> Sample Employment
+              </button>
+              <button type="button" class="btn btn-sm btn-light border btn-load-sample" data-sample="judgment">
+                <i class="bi bi-hammer me-1"></i> Sample Judgment
+              </button>
+            </div>
+          </div>
+
+          <!-- Classify Button -->
+          <button type="button" id="classify-btn" class="btn btn-gold w-100 py-2 d-flex justify-content-center align-items-center gap-2">
+            <span id="classify-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+            <i class="bi bi-lightning-charge-fill"></i> Predict Document Category
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Column -->
+    <div class="col-lg-6">
+      
+      <!-- Initial State Placeholder -->
+      <div id="results-placeholder" class="card card-custom h-100 shadow-sm border-dashed text-center p-5 d-flex justify-content-center align-items-center">
+        <i class="bi bi-cpu text-muted" style="font-size: 4rem;"></i>
+        <h5 class="fw-bold text-navy mt-3">Classification Diagnostics</h5>
+        <p class="text-muted small max-w-400">
+          Upload a file or choose one of the sample contracts on the left, then click <strong>Predict Document Category</strong> to evaluate the model pipeline.
+        </p>
+      </div>
+
+      <!-- Real Results Panel -->
+      <div id="results-panel" class="card card-custom h-100 shadow-sm d-none">
+        <div class="card-header card-header-custom">
+          <span><i class="bi bi-check2-circle text-success me-2"></i>2. Classification Output</span>
+          <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">Inference Completed</span>
+        </div>
+        <div class="card-body p-4">
+
+          <!-- Category Banner -->
+          <div class="mb-4 text-center p-3 bg-light rounded-3 border">
+            <span class="small text-muted text-uppercase fw-bold d-block mb-1">Predicted Legal Category</span>
+            <div id="res-category" class="category-badge-lg mb-2">Non-Disclosure Agreement (NDA)</div>
+            <div class="small text-muted">
+              Model: <strong id="res-model">Linear Support Vector Machine</strong>
+            </div>
+          </div>
+
+          <!-- Confidence Score Bar -->
+          <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="small fw-bold text-navy"><i class="bi bi-speedometer2 me-1"></i>Model Confidence / Decision Score:</span>
+              <span id="res-confidence-text" class="fw-bold text-success small">86.9%</span>
+            </div>
+            <div class="progress" style="height: 10px;">
+              <div id="res-confidence-bar" class="progress-bar bg-success" role="progressbar" style="width: 86.9%;"></div>
+            </div>
+            <small class="text-muted" style="font-size: 0.75rem;">
+              Calibrated posterior probability derived via Platt Scaling on multi-class decision boundary.
+            </small>
+          </div>
+
+          <!-- Indicative Model Terms (Feature Attribution) -->
+          <div class="mb-4">
+            <span class="small fw-bold text-navy d-block mb-1">
+              <i class="bi bi-binoculars me-1"></i> Top Indicative Lexical Terms (Document Impact):
+            </span>
+            <div id="res-indicative-terms" class="p-2 bg-light rounded border">
+              <!-- Dynamically populated tags -->
+            </div>
+            <small class="text-muted" style="font-size: 0.75rem;">
+              Terms present in your document that carry the strongest positive weights toward the predicted class.
+            </small>
+          </div>
+
+          <!-- Probability Distribution Accordion -->
+          <div class="accordion mb-4" id="probAccordion">
+            <div class="accordion-item border">
+              <h2 class="accordion-header" id="headingProb">
+                <button class="accordion-button collapsed py-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProb" aria-expanded="false" aria-controls="collapseProb">
+                  <i class="bi bi-bar-chart-steps me-2"></i> View Full Class Probability Distribution
+                </button>
+              </h2>
+              <div id="collapseProb" class="accordion-collapse collapse" aria-labelledby="headingProb" data-bs-parent="#probAccordion">
+                <div class="accordion-body p-2" id="res-probabilities-list">
+                  <!-- Dynamically populated probability list -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Extracted Text Preview -->
+          <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="small fw-bold text-navy"><i class="bi bi-card-text me-1"></i>Extracted Text Excerpt:</span>
+              <span id="res-text-stats" class="text-muted small" style="font-size: 0.75rem;"></span>
+            </div>
+            <div id="res-text-preview" class="p-2 bg-light rounded border text-muted small" style="max-height: 120px; overflow-y: auto; font-family: monospace;">
+            </div>
+          </div>
+
+          <!-- Download Report Action Buttons -->
+          <div class="d-flex gap-2">
+            <button type="button" id="download-pdf-btn" class="btn btn-navy flex-grow-1 btn-sm d-flex justify-content-center align-items-center gap-2">
+              <i class="bi bi-file-earmark-pdf-fill text-danger"></i> Download PDF Report
+            </button>
+            <button type="button" id="download-txt-btn" class="btn btn-outline-navy flex-grow-1 btn-sm d-flex justify-content-center align-items-center gap-2">
+              <i class="bi bi-file-earmark-text"></i> Download TXT Report
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}
