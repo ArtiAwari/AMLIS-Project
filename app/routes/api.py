@@ -24,7 +24,7 @@ from app.ml.report_generator import (
 )
 from app.database import (
     save_prediction, get_predictions, delete_prediction,
-    clear_all_predictions, log_training_run
+    clear_all_predictions, log_training_run, get_db_connection
 )
 
 api_bp = Blueprint("api", __name__)
@@ -36,13 +36,21 @@ def allowed_file(filename: str) -> bool:
 
 @api_bp.route("/health", methods=["GET"])
 def health_check():
-    """System health and readiness check."""
+    """System health and readiness check without authentication."""
     model_ready = predictor_service.is_model_ready()
+    db_connected = False
+    try:
+        with get_db_connection() as conn:
+            conn.execute("SELECT 1").fetchone()
+            db_connected = True
+    except Exception:
+        db_connected = False
+
     return jsonify({
-        "status": "healthy" if model_ready else "degraded",
+        "status": "healthy" if (model_ready and db_connected) else "degraded",
         "model_ready": model_ready,
-        "database_connected": True
-    })
+        "database_connected": db_connected
+    }), 200
 
 
 @api_bp.route("/classify", methods=["POST"])

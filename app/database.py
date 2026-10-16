@@ -6,8 +6,9 @@ Avoids storing sensitive raw legal documents by default, preserving only non-sen
 import sqlite3
 import os
 from datetime import datetime
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 
+Tuple_Results = Tuple[List[Dict[str, Any]], int]
 DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "legal_classifier.db")
 
 
@@ -145,6 +146,3 @@ def log_training_run(dataset_rows: int, best_model: str, macro_f1: float, accura
         """, (trained_at, dataset_rows, best_model, macro_f1, accuracy))
         conn.commit()
         return cursor.lastrowid
-
-
-Tuple_Results = tuple
