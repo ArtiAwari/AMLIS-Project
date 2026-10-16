@@ -138,21 +138,17 @@ http://127.0.0.1:5000
    - Click **Predict Document Category**.
    - Observe the predicted class badge, calibrated confidence score, and **Top Indicative Lexical Terms** (e.g., *proprietary, confidential, disclosing party*).
    - Click **Download PDF Report** to view the formatted report generated on the fly with ReportLab!
-2. **Dashboard (`/dashboard`)**:
-   - Inspect live KPI statistics (Total documents, class count, best model, test accuracy).
-   - View the **Category Distribution** doughnut chart and **Model Comparison** bar chart.
-   - Inspect the interactive **Confusion Matrix** with green true-positive diagonal cells.
-3. **Model Evaluation (`/evaluation`)**:
+2. **Model Evaluation (`/evaluation`)**:
    - Review the benchmarking table comparing Naive Bayes, Logistic Regression, and Linear SVM across Accuracy, Macro Precision, Macro Recall, and Macro F1.
    - Inspect the per-class classification report and the GridSearchCV optimization results.
    - Download the full academic evaluation PDF report.
-4. **Dataset Explorer (`/dataset`)**:
+3. **Dataset Explorer (`/dataset`)**:
    - Search through the training records with live filtering.
    - Click **Retrain Machine Learning Models** to trigger training across all three algorithms with live notifications.
-5. **Prediction History (`/history`)**:
+4. **Prediction History (`/history`)**:
    - Inspect the SQLite audit log recording each classified document, confidence, and timestamp.
    - Test search, filtering, and single/all deletion controls.
-6. **AMLIS Concepts (`/concepts`)**:
+5. **AMLIS Concepts (`/concepts`)**:
    - Interact with the **2D TruncatedSVD and K-Means Explorer** by dynamically toggling cluster counts ($k=3, 4, 5, 6, 8$) and hovering over data points to explain unsupervised clustering to the external examiner!
    - Review the built-in **Viva Examination Q&A**.
 
@@ -202,7 +198,6 @@ AML Project/
 │       ├── base.html             # Base layout with navbar, footer & disclaimers
 │       ├── index.html            # Home page & pipeline overview
 │       ├── classify.html         # Interactive classification workspace
-│       ├── dashboard.html        # Live metrics & Chart.js dashboards
 │       ├── evaluation.html       # Tri-algorithm benchmarks & classification reports
 │       ├── dataset.html          # Corpus explorer & retraining controls
 │       ├── history.html          # SQLite audit trail

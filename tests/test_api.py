@@ -24,7 +24,7 @@ def test_home_page(client):
 
 
 def test_views_routes(client):
-    routes = ["/classify", "/dashboard", "/evaluation", "/dataset", "/history", "/concepts"]
+    routes = ["/classify", "/evaluation", "/dataset", "/history", "/concepts"]
     for route in routes:
         res = client.get(route)
         assert res.status_code == 200
@@ -67,14 +67,6 @@ def test_api_classify_uploaded_pdf(client):
     assert json_data["success"] is True
     assert json_data["predicted_category"] == "Non-Disclosure Agreement (NDA)"
 
-
-def test_api_dashboard_data(client):
-    res = client.get("/api/dashboard-data")
-    assert res.status_code == 200
-    data = res.get_json()
-    assert data["status"] == "ready"
-    assert "models_comparison" in data
-    assert len(data["models_comparison"]) == 3
 
 
 def test_api_evaluation_data(client):

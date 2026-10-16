@@ -150,44 +150,6 @@ def classify_document():
     return jsonify(result)
 
 
-@api_bp.route("/dashboard-data", methods=["GET"])
-def get_dashboard_data():
-    """Returns aggregated metrics and charts data for the dashboard."""
-    eval_data = load_evaluation_results()
-    dataset_path = current_app.config["DEFAULT_DATASET_PATH"]
-    df, val_report = validate_and_load_dataset(dataset_path)
-
-    if eval_data is None:
-        return jsonify({
-            "status": "not_trained",
-            "message": "No model evaluation data available. Retrain via Dataset tab."
-        })
-
-    # Prepare model comparison data for Chart.js
-    models_comparison = []
-    for m_name, m_stats in eval_data.get("models", {}).items():
-        models_comparison.append({
-            "model_name": m_name,
-            "accuracy": round(m_stats.get("accuracy", 0) * 100, 2),
-            "macro_precision": round(m_stats.get("macro_precision", 0) * 100, 2),
-            "macro_recall": round(m_stats.get("macro_recall", 0) * 100, 2),
-            "macro_f1": round(m_stats.get("macro_f1", 0) * 100, 2),
-            "weighted_f1": round(m_stats.get("weighted_f1", 0) * 100, 2),
-            "cv_mean_f1": round(m_stats.get("cv_mean_f1", 0) * 100, 2)
-        })
-
-    return jsonify({
-        "status": "ready",
-        "dataset_size": eval_data.get("dataset_size", len(df)),
-        "unique_categories": len(eval_data.get("classes", [])),
-        "best_model_name": eval_data.get("best_model_name"),
-        "selection_metric": eval_data.get("selection_metric"),
-        "classes": eval_data.get("classes", []),
-        "class_distribution": eval_data.get("class_distribution", {}),
-        "models_comparison": models_comparison,
-        "best_model_metrics": eval_data.get("models", {}).get(eval_data.get("best_model_name"), {})
-    })
-
 
 @api_bp.route("/evaluation-data", methods=["GET"])
 def get_evaluation_data():

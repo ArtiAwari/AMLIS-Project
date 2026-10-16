@@ -17,10 +17,6 @@ def classify():
     return render_template("classify.html", active_page="classify")
 
 
-@views_bp.route("/dashboard")
-def dashboard():
-    return render_template("dashboard.html", active_page="dashboard")
-
 
 @views_bp.route("/evaluation")
 def evaluation():
